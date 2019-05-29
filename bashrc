@@ -52,7 +52,7 @@ cat<< "EOF"
          _/ /          \_\
         /_!/            >_\
 EOF
-" to here :)
+# to here :)
 echo -e "\e[0;33m"
 
 if [[ $EUID -eq 0 ]]; then
