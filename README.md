@@ -1,3 +1,6 @@
+[![Build automation](https://img.shields.io/docker/cloud/automated/maryanmorel/mayhem-pegasus.svg)](https://img.shields.io/docker/cloud/automated/maryanmorel/mayhem-pegasus)
+[![Build status](https://img.shields.io/docker/cloud/build/maryanmorel/mayhem-pegasus.svg)](https://img.shields.io/docker/cloud/build/maryanmorel/mayhem-pegasus)
+
 # mayhem-pegasus
 
 Useful docker images for deep learning and machine learning in general.
@@ -13,8 +16,17 @@ docker build -f ./Dockerfile -t mayhem-pegasus:<TAG> .
 To run a jupyter lab session and mounting a shared folder (host: `./mnt` will be paired with `/io` in the container) :
 
 ```
-docker run -u $(id -u):$(id -g)  -v $PWD/mnt:/io -p 0.0.0.0:<local jupyter port>:8888 -p 0.0.0.0:<local tensorboard port>:6006 -it --runtime=nvidia --rm mayhem-pegasus:<TAG>
+docker run -u $(id -u):$(id -g)  -v $PWD/mnt:/io -p 0.0.0.0:<local jupyter port>:8888 -p 0.0.0.0:<local tensorboard port>:6006 -it --gpus <device> --rm mayhem-pegasus:<TAG>
 ```
+
+where `<device>` is the device number. If you want to use multiple devices, see usage [examples](https://github.com/NVIDIA/nvidia-docker#usage).
+
+#### examples:
+`--gpus 0` to use only device 0
+
+`--gpus '"device=1,2"'` to use devices 1 and 2
+
+`--gpus all` to use all devices
 
 ## Prerequisites
 

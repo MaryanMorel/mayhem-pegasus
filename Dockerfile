@@ -54,10 +54,16 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         typing \
         dask  && \
      /opt/conda/bin/conda install -y -c pytorch pytorch torchvision cudatoolkit=10.0 magma-cuda100 ignite && \
-     /opt/conda/bin/pip install tensorflow-gpu==2.0.0-beta0 && \
+     /opt/conda/bin/pip install tensorflow-gpu==2.0.0-beta1 && \
      /opt/conda/bin/conda install -y -c conda-forge ninja jedi jupyterlab tensorboardx pyarrow fastparquet && \
      /opt/conda/bin/conda clean -ya && \
-     mkdir /.local && chmod a+rwx /.local
+     mkdir /.local && chmod a+rwx /.local &&\
+     cd /opt && \
+     git clone https://github.com/keras-team/keras-tuner.git && \
+     cd keras-tuner && \
+     /opt/conda/bin/pip install . && \
+     cd /opt && \
+     rm -rf keras-tuner
 
 # Update ENV
 ENV PATH /opt/conda/bin:$PATH
