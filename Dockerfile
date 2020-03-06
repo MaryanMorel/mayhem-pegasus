@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 ARG PYTHON_VERSION=3.7
 
 LABEL maintainer="Maryan Morel <maryan.morel@polytechnique.edu>"
@@ -41,8 +41,8 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         scipy \
         numpy \
         pandas \
-        jupyter \
-        dill \
+	jupyter \
+	dill \
         h5py \
         protobuf \
         scikit-learn \
@@ -57,14 +57,14 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
     /opt/conda/bin/conda install -c pytorch -y \
         pytorch \
         torchvision \
-        cudatoolkit=10.2 \
-        magma-cuda102 \
+        cudatoolkit=10.1 \
+        magma-cuda101 \
         ignite \
         captum && \
     /opt/conda/bin/conda install -c conda-forge -y \
         ninja \
         jedi \
-        jupyterlab \
+        jupyterlab=1 \
         pyarrow \
         fastparquet && \
     /opt/conda/bin/pip install \
