@@ -41,8 +41,8 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         scipy \
         numpy \
         pandas \
-	jupyter \
-	dill \
+	    jupyter \
+	    dill \
         h5py \
         protobuf \
         scikit-learn \
@@ -66,7 +66,8 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         jedi \
         jupyterlab=1 \
         pyarrow \
-        fastparquet && \
+        fastparquet \
+        python-snappy && \
     /opt/conda/bin/pip install \
         pytorch-lightning \
         tensorflow-gpu \
