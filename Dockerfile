@@ -77,6 +77,10 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         keras-tuner && \
     /opt/conda/bin/jupyter labextension install jupyterlab-nvdashboard && \
     /opt/conda/bin/conda clean -ya && \
+    cd /opt && git clone https://github.com/NVIDIA/apex && \
+    cd apex && \
+    /opt/conda/bin/pip install -v --no-cache-dir --global-option="--pyprof" --global-option="--cpp_ext" --global-option="--cuda_ext" ./ && \
+    cd .. && rm -rf apex &&\
     mkdir /.local && chmod a+rwx /.local
 
 # Update ENV
