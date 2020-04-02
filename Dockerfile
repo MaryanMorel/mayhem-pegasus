@@ -68,6 +68,8 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         pyarrow \
         fastparquet \
         python-snappy && \
+    /opt/conda/bin/conda install -c conda-forge -y \
+        arrow-cpp && \
     /opt/conda/bin/pip install \
         pytorch-lightning \
         tensorflow-gpu \
