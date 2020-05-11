@@ -77,7 +77,8 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         jupyterlab-nvdashboard \
         jupyter-tensorboard \
         keras-tuner \
-        "ray[tune]" && \
+        "ray[tune]" \
+        hydra-core && \
     /opt/conda/bin/jupyter labextension install jupyterlab-nvdashboard && \
     /opt/conda/bin/conda clean -ya && \
     cd /opt && git clone https://github.com/NVIDIA/apex && \
