@@ -23,72 +23,76 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         vim \
         ca-certificates \
         libjpeg-dev \
-        libpng-dev && \
+        libpng-dev \
+        wget && \
     curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -y nodejs yarn && \
     rm -rf /var/lib/apt/lists/* && \
-    curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
+    wget 'https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh' -O ~/miniconda.sh  && \
     chmod +x ~/miniconda.sh && \
     ~/miniconda.sh -b -p /opt/conda && \
-    rm ~/miniconda.sh && \
-    /opt/conda/bin/conda install -y python=$PYTHON_VERSION \
+    rm ~/miniconda.sh
+ENV PATH /opt/conda/bin:$PATH
+# Base package
+RUN conda install -y python=$PYTHON_VERSION \
         setuptools \
-        ninja \
+        typing \
         cmake \
-        cffi \
-        numpy \
-        pyyaml \
-        scipy \
-        numpy \
-        pandas \
-	    jupyter \
-	    dill \
-        h5py \
-        protobuf \
-        scikit-learn \
-        matplotlib \
-        seaborn \
-        ipython \
+        cython \
         mkl \
         mkl-include \
-        cython \
-        typing \
-        dask && \
-    /opt/conda/bin/conda install -c pytorch -y \
+        ninja \
+        cffi \
+        dill \
+        ipython \
+        jupyter \
+        scipy \
+        numpy \
+        scikit-learn \
+        tqdm \
+        pandas \
+        dask \
+        pyyaml \
+        h5py \
+        protobuf \
+        matplotlib \
+        seaborn && \
+    conda install -c conda-forge -y \
+        ninja \
+        jedi \
+        jupyterlab \
+        fastparquet \
+        python-snappy \
+        rise && \
+    pip install pyarrow && \
+    conda install -c pytorch -y \
         pytorch \
-        torchvision \
+        torchtext \
         cudatoolkit=10.1 \
         magma-cuda101 \
         ignite \
         captum && \
-    /opt/conda/bin/conda install -c conda-forge -y \
-        ninja \
-        jedi \
-        jupyterlab=1 \
-        pyarrow \
-        fastparquet \
-        python-snappy && \
-    /opt/conda/bin/conda install -c conda-forge -y \
-        arrow-cpp && \
-    /opt/conda/bin/pip install \
+    conda install -c dglteam -y dgl-cuda10.1 && \
+    pip install \
         pytorch-lightning \
         tensorflow-gpu \
-        tensorboardx \
-        jupyterlab-nvdashboard \
         jupyter-tensorboard \
-        keras-tuner \
-        "ray[tune]" \
-        hydra-core && \
-    /opt/conda/bin/jupyter labextension install jupyterlab-nvdashboard && \
-    /opt/conda/bin/conda clean -ya && \
-    cd /opt && git clone https://github.com/NVIDIA/apex && \
-    cd apex && \
-    /opt/conda/bin/pip install -v --no-cache-dir --global-option="--pyprof" --global-option="--cpp_ext" --global-option="--cuda_ext" ./ && \
-    cd .. && rm -rf apex &&\
+        hydra-core \
+        "ray[tune]"
+RUN jupyter labextension install jupyterlab_tensorboard && \
+    jupyter labextension enable jupyterlab_tensorboard && \
+    jupyter labextension install @aquirdturtle/collapsible_headings && \
+    jupyter labextension enable @aquirdturtle/collapsible_headings && \
+    jupyter labextension install @jupyterlab/toc && \
+    jupyter labextension enable @jupyterlab/toc && \
+    jupyter labextension install jupyterlab-execute-time && \
+    jupyter labextension enable jupyterlab-execute-time && \
+    conda clean -ya && \
     mkdir /.local && chmod a+rwx /.local
-
-# Update ENV
-ENV PATH /opt/conda/bin:$PATH
+RUN mkdir -p /.jupyter/lab/user-settings/@jupyterlab/notebook-extension && \
+    cd /.jupyter/lab/user-settings/@jupyterlab/notebook-extension && \
+    echo "{\"recordTiming\": true}" > tracker.jupyterlab-settings && \
+    chmod a+rwx /.jupyter
 
 WORKDIR /workspace
 EXPOSE 8888 6006
