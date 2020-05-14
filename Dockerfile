@@ -6,10 +6,13 @@ LABEL maintainer="Maryan Morel <maryan.morel@polytechnique.edu>"
 # Needed for string substitution 
 SHELL ["/bin/bash", "-c"]
 COPY bashrc /etc/bash.bashrc
+ENV PATH /opt/conda/bin:$PATH
 
 # Setup env. conda, python and install basic libs
 RUN chmod a+rwx /etc/bash.bashrc &&\
-    apt-get update && apt-get install -y --no-install-recommends --fix-missing \
+    apt update && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
         build-essential \
         cmake \
         curl \
@@ -24,17 +27,16 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         ca-certificates \
         libjpeg-dev \
         libpng-dev \
-        wget && \
+        wget \
+        rsync && \
     curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
     apt-get install -y nodejs yarn && \
     rm -rf /var/lib/apt/lists/* && \
     wget 'https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh' -O ~/miniconda.sh  && \
     chmod +x ~/miniconda.sh && \
     ~/miniconda.sh -b -p /opt/conda && \
-    rm ~/miniconda.sh
-ENV PATH /opt/conda/bin:$PATH
-# Base package
-RUN conda install -y python=$PYTHON_VERSION \
+    rm ~/miniconda.sh && \
+    conda install -y python=$PYTHON_VERSION \
         setuptools \
         typing \
         cmake \
@@ -52,6 +54,7 @@ RUN conda install -y python=$PYTHON_VERSION \
         tqdm \
         pandas \
         dask \
+        networkx \
         pyyaml \
         h5py \
         protobuf \
@@ -68,32 +71,48 @@ RUN conda install -y python=$PYTHON_VERSION \
     conda install -c pytorch -y \
         pytorch \
         torchtext \
+        torchvision \
+        torchaudio \
         cudatoolkit=10.1 \
         magma-cuda101 \
         ignite \
         captum && \
     conda install -c dglteam -y dgl-cuda10.1 && \
+    conda install -c fastai fastai && \
     pip install \
         pytorch-lightning \
         tensorflow-gpu \
-        jupyter-tensorboard \
+        tensorflow-probability \
+        pyro-ppl  \
         hydra-core \
-        "ray[tune]"
-RUN jupyter labextension install jupyterlab_tensorboard && \
-    jupyter labextension enable jupyterlab_tensorboard && \
+        optuna \
+        "ray[tune]" \
+        hyperopt && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
+    jupyter labextension enable @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install @aquirdturtle/collapsible_headings && \
     jupyter labextension enable @aquirdturtle/collapsible_headings && \
     jupyter labextension install @jupyterlab/toc && \
     jupyter labextension enable @jupyterlab/toc && \
     jupyter labextension install jupyterlab-execute-time && \
     jupyter labextension enable jupyterlab-execute-time && \
-    conda clean -ya && \
-    mkdir /.local && chmod a+rwx /.local
-RUN mkdir -p /.jupyter/lab/user-settings/@jupyterlab/notebook-extension && \
-    cd /.jupyter/lab/user-settings/@jupyterlab/notebook-extension && \
-    echo "{\"recordTiming\": true}" > tracker.jupyterlab-settings && \
-    chmod a+rwx /.jupyter
+    jupyter lab clean && \
+    jupyter lab build && \
+    conda clean -ya
 
-WORKDIR /workspace
-EXPOSE 8888 6006
+RUN mkdir -p /home/mayhem && chmod a+rwx /home/mayhem && cd /home/mayhem && \
+    mkdir -p .local && chmod a+rwx .local && \
+    mkdir -p .jupyter/lab/user-settings/@jupyterlab/notebook-extension && \
+    echo "{\"recordTiming\": true}" > .jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings && \
+    chmod -R a+rwx .jupyter && \
+    mkdir -p .conda && \
+    chmod -R a+rw .conda
+
+# tensorflow_probability
+# hyperopt
+# lightgbm
+
+ENV HOME /home/mayhem
+WORKDIR /io
+EXPOSE 8888 8265 6006
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter lab --notebook-dir=/io --ip 0.0.0.0 --no-browser --allow-root"]
