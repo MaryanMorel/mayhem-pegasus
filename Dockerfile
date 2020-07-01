@@ -80,7 +80,7 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
     conda install -c dglteam -y dgl-cuda10.1 && \
     conda install -c fastai fastai && \
     pip install \
-        pytorch-lightning \
+        pytorch-lightning==0.8.4 \
         tensorflow-gpu \
         tensorflow-probability \
         pyro-ppl  \
