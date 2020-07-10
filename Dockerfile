@@ -86,8 +86,9 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         pyro-ppl  \
         hydra-core \
         optuna \
-        "ray[tune]" \
+        # "ray[tune]" \
         hyperopt && \
+    pip install -U https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.9.0.dev0-cp37-cp37m-manylinux1_x86_64.whl && \
     jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension enable @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install @aquirdturtle/collapsible_headings && \
