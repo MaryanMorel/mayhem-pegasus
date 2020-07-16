@@ -78,18 +78,21 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         ignite \
         captum && \
     conda install -c dglteam -y dgl-cuda10.1 && \
-    conda install -c fastai fastai && \
-    pip install \
+    conda install -c fastai fastai
+RUN pip install -U https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.9.0.dev0-cp37-cp37m-manylinux1_x86_64.whl
+RUN pip install \
         pytorch-lightning==0.8.4 \
         tensorflow-gpu \
         tensorflow-probability \
         pyro-ppl  \
         hydra-core \
         optuna \
-        # "ray[tune]" \
-        hyperopt && \
-    pip install -U https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.9.0.dev0-cp37-cp37m-manylinux1_x86_64.whl && \
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
+        hyperopt \
+        fastai \
+        fastai2 \
+        pytorch-fast-transformers \
+        ray[tune]
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension enable @jupyter-widgets/jupyterlab-manager && \
     jupyter labextension install @aquirdturtle/collapsible_headings && \
     jupyter labextension enable @aquirdturtle/collapsible_headings && \
@@ -108,10 +111,6 @@ RUN mkdir -p /home/mayhem && chmod a+rwx /home/mayhem && cd /home/mayhem && \
     chmod -R a+rwx .jupyter && \
     mkdir -p .conda && \
     chmod -R a+rw .conda
-
-# tensorflow_probability
-# hyperopt
-# lightgbm
 
 ENV HOME /home/mayhem
 WORKDIR /io
