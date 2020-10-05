@@ -1,5 +1,5 @@
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.8
 
 LABEL maintainer="Maryan Morel <maryan.morel@polytechnique.edu>"
 
@@ -69,7 +69,7 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         rise && \
     pip install pyarrow && \
     conda install -c pytorch -y \
-        pytorch \
+        pytorch=1.6.0 \
         torchtext \
         torchvision \
         torchaudio \
@@ -78,30 +78,21 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         ignite \
         captum && \
     conda install -c dglteam -y dgl-cuda10.1 && \
-    conda install -c fastai fastai
-RUN pip install -U https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.9.0.dev0-cp37-cp37m-manylinux1_x86_64.whl
-RUN pip install \
-        pytorch-lightning==0.8.4 \
-        tensorflow-gpu \
-        tensorflow-probability \
-        pyro-ppl  \
+    pip install comet_ml && \
+    pip install \
+        pytorch-lightning==0.9.0 \
+        tensorboard \
         hydra-core \
         optuna \
         hyperopt \
-        fastai \
-        fastai2 \
         pytorch-fast-transformers \
-        ray[tune]
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
-    jupyter labextension enable @jupyter-widgets/jupyterlab-manager && \
+        ray[tune] && \
     jupyter labextension install @aquirdturtle/collapsible_headings && \
     jupyter labextension enable @aquirdturtle/collapsible_headings && \
-    jupyter labextension install @jupyterlab/toc && \
-    jupyter labextension enable @jupyterlab/toc && \
     jupyter labextension install jupyterlab-execute-time && \
     jupyter labextension enable jupyterlab-execute-time && \
     jupyter lab clean && \
-    jupyter lab build && \
+    jupyter lab build --dev-build=False --minimize=False && \
     conda clean -ya
 
 RUN mkdir -p /home/mayhem && chmod a+rwx /home/mayhem && cd /home/mayhem && \
