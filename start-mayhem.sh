@@ -1,5 +1,5 @@
-#!/bin/sh
-echo "\e[1;31mLet the mayhem begin! \e[0m \n"
+#!/bin/bash
+echo -e "\e[1;31mLet the mayhem begin!\e[0m \n"
 
 GPU_ARG=$1  # Number or id of GPUs
 CMD=${2:-''}  # input "bin/bash" if you want to run the container in shell mode instead of a jupyter server
