@@ -80,13 +80,13 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
     conda install -c dglteam -y dgl-cuda10.1 && \
     pip install comet_ml && \
     pip install \
-        pytorch-lightning==0.9.0 \
+        pytorch-lightning==0.10.0 \
         tensorboard \
-        hydra-core \
+        hydra-core==1.0.3 \
         optuna \
         hyperopt \
         pytorch-fast-transformers \
-        ray[tune] && \
+        ray[tune]==1.0.0 && \
     jupyter labextension install @aquirdturtle/collapsible_headings && \
     jupyter labextension enable @aquirdturtle/collapsible_headings && \
     jupyter labextension install jupyterlab-execute-time && \
@@ -97,11 +97,12 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
 
 RUN mkdir -p /home/mayhem && chmod a+rwx /home/mayhem && cd /home/mayhem && \
     mkdir -p .local && chmod a+rwx .local && \
+    mkdir -p .config/git && chmod -R a+rwx .config && \
     mkdir -p .jupyter/lab/user-settings/@jupyterlab/notebook-extension && \
     echo "{\"recordTiming\": true}" > .jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings && \
     chmod -R a+rwx .jupyter && \
-    mkdir -p .conda && \
-    chmod -R a+rw .conda
+    mkdir -p .conda && chmod -R a+rwx .conda && \
+    mkdir -p /data && chmod -R a+rwx /data
 
 ENV HOME /home/mayhem
 WORKDIR /io

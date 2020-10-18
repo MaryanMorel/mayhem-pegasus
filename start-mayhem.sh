@@ -2,7 +2,7 @@
 echo -e "\e[1;31mLet the mayhem begin!\e[0m \n"
 
 GPU_ARG=$1  # Number or id of GPUs
-CMD=${2:-''}  # input "bin/bash" if you want to run the container in shell mode instead of a jupyter server
+CMD=${2:-''}  # input "/bin/bash" if you want to run the container in shell mode instead of a jupyter server
 CPU_COUNT=${3:-10} # Default number of cpus used by the container
 JUPYTER_PORT=${4:-8888}  # Notebook port
 TB_PORT=${5:-6006}  # Tensorboard default port
