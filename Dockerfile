@@ -1,5 +1,8 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+
+FROM nvidia/cuda:11.2.1-cudnn8-devel-ubuntu20.04
 ARG PYTHON_VERSION=3.8
+# ENV TZ=Europe/Paris
+ENV DEBIAN_FRONTEND noninteractive
 
 LABEL maintainer="Maryan Morel <maryan.morel@polytechnique.edu>"
 
@@ -60,36 +63,35 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         protobuf \
         matplotlib \
         seaborn && \
-    conda install -c conda-forge -y \
+    conda install -c conda-forge -c pytorch -c nvidia -c dglteam -y \
         ninja \
         jedi \
         jupyterlab \
         fastparquet \
         python-snappy \
-        rise && \
-    pip install pyarrow && \
-    conda install -c pytorch -y \
-        pytorch=1.6.0 \
+        rise \
+        pytorch=1.7.1 \
         torchtext \
         torchvision \
         torchaudio \
-        cudatoolkit=10.1 \
-        magma-cuda101 \
         ignite \
-        captum && \
-    conda install -c dglteam -y dgl-cuda10.1 && \
-    pip install comet_ml && \
+        captum \
+        cudatoolkit=11.2 \
+        dgl-cuda11.0 \
+        magma-cuda112 \
+        nodejs=15.10 \
+        jupyterlab_execute_time && \
     pip install \
-        pytorch-lightning==0.10.0 \
+        pyarrow \
+        comet_ml \
+        pytorch-lightning==1.2.1 \
         tensorboard \
-        hydra-core==1.0.3 \
+        hydra-core \
         optuna \
         hyperopt \
-        pytorch-fast-transformers \
-        ray[tune]==1.0.0 && \
+        ray[tune] && \
     jupyter labextension install @aquirdturtle/collapsible_headings && \
     jupyter labextension enable @aquirdturtle/collapsible_headings && \
-    jupyter labextension install jupyterlab-execute-time && \
     jupyter labextension enable jupyterlab-execute-time && \
     jupyter lab clean && \
     jupyter lab build --dev-build=False --minimize=False && \

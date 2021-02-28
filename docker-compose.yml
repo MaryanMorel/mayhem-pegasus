@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  mayhem-pegasus:
+    build:
+      context: .
+      shm_size: 40g
+    container_name: mayhem-pegasus
+    image: mayhem-pegasus:release-1.2
+    ports:
+      - "8888:8888"
+      - "6006:6006"
+      - "8265:8265"
+    restart: always
+    volumes:
+      - "/Users/stephanegaiffas/Code/deep_learning/labs/:/io"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: 16
+          memory: 32G
