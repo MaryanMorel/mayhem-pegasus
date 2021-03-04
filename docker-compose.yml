@@ -1,9 +1,6 @@
 version: "3.8"
 services:
   mayhem-pegasus:
-    build:
-      context: .
-      shm_size: 40g
     container_name: mayhem-pegasus
     image: mayhem-pegasus:release-1.2
     ports:
@@ -19,3 +16,4 @@ services:
         limits:
           cpus: 16
           memory: 32G
+    command: bash -c "source /etc/bash.bashrc && jupyter lab --notebook-dir=/io --ip 0.0.0.0 --no-browser --allow-root & tensorboard --bind_all --logdir /io/logs/"

@@ -79,7 +79,7 @@ RUN chmod a+rwx /etc/bash.bashrc &&\
         cudatoolkit=11.2 \
         dgl-cuda11.0 \
         magma-cuda112 \
-        nodejs=15.10 \
+        nodejs=15.10 \ 
         jupyterlab_execute_time && \
     pip install \
         pyarrow \
@@ -110,3 +110,4 @@ ENV HOME /home/mayhem
 WORKDIR /io
 EXPOSE 8888 8265 6006
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter lab --notebook-dir=/io --ip 0.0.0.0 --no-browser --allow-root"]
+
